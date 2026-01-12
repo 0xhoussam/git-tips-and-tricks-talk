@@ -144,7 +144,9 @@ git log
 Congratulations!
 You just created your first "Save Point" in history.
 
+
 <!-- end_slide -->
+
 
 ## 7. Summary Checklist
 
@@ -152,3 +154,149 @@ You just created your first "Save Point" in history.
 - `git status` -> See what's happening.
 - `git add` -> Put changes in the cart.
 - `git commit` -> Get the receipt.
+
+
+<!-- end_slide -->
+
+
+# Phase 3: The Safety Net 🪂
+### How to fix mistakes and explore "Parallel Universes"
+
+<!-- pause -->
+
+## 1. The "Oops" Button (Undoing)
+Imagine you accidentally deleted everything in your file. 
+As long as you haven't committed, Git can teleport the file back from your last "Receipt."
+
+```bash
+# Let's ruin our file
+echo "THIS IS A MISTAKE" > fridge.txt
+git status
+```
+
+<!-- pause -->
+```bash
+git restore fridge.txt
+cat fridge.txt
+```
+Result: Your "Milk" is back! Git restored it from the last snapshot.
+
+
+<!-- end_slide -->
+
+
+## 2. Branching: Parallel Universes
+What if you want to try a crazy new idea (like adding "Chocolate Milk") but you don't want to mess up the original fridge?
+
+<!-- pause -->
+
+**A Branch** is a separate timeline. You can do anything there, and the main timeline stays perfectly safe.
+
+## 3. Creating a New Universe
+Let's create a branch called experimental-flavors.
+
+```bash
+git switch -c experimental-flavors
+# or
+git checkout -b experimental-flavors
+```
+Now let's add something "dangerous":
+
+<!-- pause -->
+
+```bash
+echo "1x Chocolate Milk" >> fridge.txt
+git add fridge.txt
+git commit -m "Testing chocolate milk"
+```
+
+
+<!-- end_slide -->
+
+
+## 4. Teleporting Between Timelines
+Now, watch the magic. Let's go back to the main timeline.
+
+```bash
+git switch main
+# or 
+git checkout main
+cat fridge.txt
+```
+Wait! Where is the Chocolate Milk? It's gone! It only exists in the experimental-flavors universe. Your main fridge is still exactly how you left it.
+
+
+<!-- end_slide -->
+
+
+# Phase 3.5: The Merge Conflict 💥
+### What happens when two timelines disagree?
+
+## 1. What is a Conflict?
+Imagine two people try to change the **exact same line** of the **exact same file** in two different ways.
+
+Git is smart, but it's not a mind reader. It stops and asks: 
+> "I don't know which one you want. You decide."
+
+<!-- pause -->
+
+## 2. Setting the Trap
+Let's change the milk on our `main` branch.
+```bash
+# We are on main
+echo "1x Organic Whole Milk" >> fridge.txt
+git add fridge.txt
+git commit -m "Update milk to organic on main"
+```
+
+<!-- pause -->
+
+Now, let's go to our other branch and change that same line to something else.
+```bash
+git switch experimental-flavors
+echo "1x Almond Milk" >> fridge.txt
+git add fridge.txt
+git commit -m "Change milk to almond on branch"
+```
+
+
+<!-- end_slide -->
+
+
+## 3. The "Explosion"
+Now, let's try to bring that experimental-flavors change into main.
+```bash
+git switch main
+git merge experimental-flavors
+```
+
+<!-- pause -->
+
+OH NO! Git says: CONFLICT (content): Merge conflict in fridge.txt. The merge has failed. Let's see what the file looks like now.
+
+<!-- pause -->
+
+```bash
+cat fridge.txt
+```
+
+<!-- end_slide -->
+
+## 4. Reading the "Conflict Markers"
+Git has rewritten your file to show you the choices:
+
+```bash
+<<<<<<< HEAD
+1x Organic Whole Milk  (This is what Main has)
+=======
+1x Almond Milk         (This is what the Branch has)
+>>>>>>> experimental-flavors
+```
+
+<!-- pause -->
+```bash
+git add fridge.txt
+git commit -m "Fixed conflict"
+```
+**Conflict Resolved!**
+You are now a Git Master. You faced the "scariest" part of Git and won.
