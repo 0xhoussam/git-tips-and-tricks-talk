@@ -81,3 +81,74 @@ You go to the register and pay.
 * You get a **Receipt** (this is your **Commit**).
 * The receipt is a permanent record of exactly what you bought and when.
 * **Command:** `git commit -m "Weekly groceries"`
+
+
+<!-- end_slide -->
+
+# Phase 2: Building Your First Store
+## 1. Create the Project
+
+<!-- pause -->
+
+First, we need a folder. Think of this as renting the space for your grocery store.
+
+```bash
+mkdir my_grocery_store
+cd my_grocery_store
+git init
+```
+
+<!-- pause -->
+
+Always run this when you are confused.
+## 2. The "What's in my cart?" Command
+```bash
+git status
+```
+Output: "nothing to commit" (The store is empty!)
+
+<!-- end_slide -->
+
+## 3. Creating our first "Item"
+Let's add some milk to our "Aisle."
+```bash
+echo "1x Carton of Milk" > fridge.txt
+git status
+```
+**Observation**: The file is RED. It’s on the shelf, but not in our cart yet!
+
+<!-- pause -->
+
+## 4. Put it in the Cart (Add)
+Let's "Stage" the milk.
+```bash
+git add fridge.txt
+git status
+```
+**Observation**: The file is GREEN. It’s in the cart!
+
+<!-- end_slide -->
+
+## 5. Checkout (Commit)
+Let's lock in the purchase and get our receipt.
+```bash
+git commit -m "Add milk to the fridge"
+```
+Pro Tip: The -m is your "Receipt Note." Make it descriptive!
+
+## 6. Reviewing the Receipts
+How do we see our history?
+```bash
+git log
+```
+Congratulations!
+You just created your first "Save Point" in history.
+
+<!-- end_slide -->
+
+## 7. Summary Checklist
+
+- `git init` -> Big Bang.
+- `git status` -> See what's happening.
+- `git add` -> Put changes in the cart.
+- `git commit` -> Get the receipt.
