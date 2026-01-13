@@ -300,3 +300,308 @@ git commit -m "Fixed conflict"
 ```
 **Conflict Resolved!**
 You are now a Git Master. You faced the "scariest" part of Git and won.
+
+
+<!-- end_slide -->
+
+
+# Phase 4: Collaboration
+### Taking your code to the Cloud
+## Git vs. GitHub
+Think of the difference between a file on your Desktop and a Google Doc.
+
+<!-- pause  -->
+
+* **Git:** Like a **Microsoft Word** file on your hard drive. 
+  - You can edit it offline.
+  - You save versions like `v1`, `v2`.
+  - No one else can see it until you send it.
+
+<!-- pause  -->
+
+* **GitHub:** Like **Google Docs**. 
+  - It lives on the internet.
+  - It is the "Master Copy" that everyone looks at.
+  - It lets multiple people suggest changes.
+
+
+<!-- end_slide -->
+
+
+## 1. Connecting to the "Server"
+To upload your saves, you need to tell your Console where the Cloud Server is.
+
+```sh
+# We give the server a nickname: "origin"
+git remote add origin https://github.com/user/example.git
+```
+Origin: This is just a nickname for your GitHub URL so you don't have to type the whole link every time.
+
+<!-- pause -->
+
+## 2. The "Upload" (Pushing)
+Think of this as "Uploading" your history.
+```sh
+git push origin main
+```
+
+<!-- pause -->
+
+## 3. The Other Side: Cloning
+What if you want to work on a friend's project? You don't init, you clone.
+```sh
+git clone https://github.com/user/example.git
+```
+**Note**: Cloning downloads the entire history, every commit, and every branch. It’s a complete copy.
+
+
+<!-- end_slide -->
+
+
+## 4. Pulling: Staying in Sync
+If your teammate pushes a new feature, your local computer is now "out of date." You need to bring those changes down.
+```sh
+git pull origin main
+```
+
+<!-- pause -->
+
+## 5. The Collaboration Cycle
+
+This is the daily rhythm of a developer:
+
+- git pull (See what others did)
+- Work (Change files)
+- git add (Put in cart)
+- git commit (Get receipt)
+- git push (Share with the world)
+
+
+<!-- end_slide -->
+
+
+# Phase 5: The Time Traveler's Toolkit
+
+## 1. The "I Forgot Something" Command
+Have you ever committed, then realized you forgot to add a file? 
+Or worse... you had a typo in your commit message?
+
+> **Don't make a second commit!** Just fix the last one.
+
+<!-- pause -->
+
+### The Scenario:
+```bash
+echo "1x Eggs" > grocery_list.txt
+git add grocery_list.txt
+git commit -m "Add egss"
+```
+
+<!-- pause -->
+
+Let's fix the "Milk" part:
+
+```sh
+echo "1x Milk" >> grocery_list.txt
+git add grocery_list.txt
+```
+
+<!-- pause -->
+
+Now, let's "rewrite" that last commit:
+
+```bash
+git commit --amend -m "Add eggs and milk"
+```
+
+<!-- pause -->
+
+**result**:
+```sh
+git log
+```
+
+<!-- end_slide -->
+
+
+⚠️ The Golden Rule of Amending
+Amending is amazing, but it has one big rule:
+Never amend a commit that you have already **PUSHED** to GitHub.
+
+<!-- pause -->
+
+Why? Because you are technically "deleting" the old commit and creating a new one. If your friends already downloaded the old one, their "History" will no longer match yours, and the universe will explode (or you'll just get a very annoying error).
+
+
+<!-- end_slide -->
+
+
+## 2. Ignore Stuff
+The "Blindfold" for Git. There are files you never want to save, such as private passwords, huge "junk" folders, or temporary system files.
+
+```sh
+# Create the ignore list
+echo "secrets.txt" > .gitignore
+
+# Create a "secret" file
+echo "MY_PASSWORD_123" > secrets.txt
+
+# See the result
+git status
+```
+Notice: Git sees the .gitignore file, but it completely ignores the existence of secrets.txt. Your passwords stay off the internet!
+
+
+<!-- end_slide -->
+
+
+## 3. git diff
+The "Magnifying Glass." While git status tells you what files changed, git diff shows you exactly what lines you added or deleted.
+```sh
+echo "1x Coffee" >> grocery_list.txt
+
+# Inspect the change
+git diff
+```
+<!-- pause -->
+**Pro-Tip**: Always run git diff before you git add. It is the ultimate double-check to make sure you aren't committing any "placeholder" code or mistakes.
+
+<!-- pause -->
+
+## 4. git stash
+The "Emergency Pocket." Use this when you're in the middle of a mess, but you suddenly need to switch branches to fix a bug.
+
+```sh
+# 1. Hide your messy work in a "stash"
+git stash --all
+
+# 2. Your workspace is now clean! Switch branches safely.
+# (Do your urgent fix...)
+
+# 3. Bring your work back exactly where you left it
+git stash pop
+```
+
+The Logic: It takes your uncommitted changes and puts them in a temporary storage drawer, leaving your working directory perfectly clean so you can move around.
+
+
+<!-- end_slide -->
+
+## 5. git reset
+**The Rewind Button.** Sometimes you want to completely discard your recent commits and move the "Time Machine" back to a previous point.
+
+<!-- pause -->
+
+### Three ways to reset:
+1. **`--soft`**: Keep your changes in the Staging Area (the cart).
+2. **`--mixed`**: Keep your changes in the Working Directory (the aisle).
+3. **`--hard`**: **DANGER.** Delete the changes forever.
+
+<!-- pause -->
+
+Warning: --hard is one of the few Git commands that can actually delete your work permanently... or can it?
+
+
+<!-- end_slide -->
+
+
+## 6. git reflog
+The "Safety Net of the Safety Net." Did you just do a git reset --hard by mistake and lose your work? Don't panic.
+Git keeps a secret log of every single place your "Head" has been in the last 30–90 days. This is the Reflog.
+```sh
+# See every move you've ever made
+git reflog
+```
+
+<!-- pause -->
+
+How to use it to fix a mistake:
+1. Find the point in the list before you messed up (e.g., HEAD@{1}).
+2. Reset back to that specific moment.
+```sh
+git reset --hard HEAD@{1}
+```
+
+The Lesson: In Git, it is almost impossible to truly lose data as long as you have committed it at least once.
+
+
+<!-- end_slide -->
+
+
+# Phase 6: The 1KRC Challenge
+### One Thousand Row Challenge (Collaborative Edition)
+
+## The Scenario
+We need to process weather data from a text file. 
+* **Student A** builds the "Data Generator."
+* **Student B** forks it and builds the "Analytics Engine."
+
+---
+<!-- pause -->
+## The API Contract 📜
+Before you start, both partners must agree on the **Data Format**. 
+
+**File Name:** `weather.txt`
+**Format:** `City;Temperature` (Separated by a semicolon)
+**Example Line:** `Ben Guerir;28.5`
+
+> **Warning:** No spaces around the semicolon! `City ; Temp` will break the code.
+
+<!-- end_slide -->
+## Task 1: The Generator (Student A)
+<!-- column_layout: [1, 1] -->
+<!-- column: 0 -->
+**Goal:** Create the data source.
+
+1. Create GitHub repo: `mini-1brc`.
+2. Create `setup_data.py`
+3. Crucial: Add weather.txt to your .gitignore before pushing!
+
+
+<!-- column: 1 -->
+## Task 2: The Processor (Student B)
+Goal: Parse the strict format and calculate the average.
+
+---
+1. Fork and Clone Student A's repo.
+2. Create calculate.py.
+3. The Logic: You must split the line exactly at the ;.
+4. push and open a Pull Request.
+
+<!-- reset_layout -->
+
+## Task 3: Review & Merge (Student A)
+
+Goal: Check the "Contract" and Merge.
+
+1. Open the Pull Request on GitHub.
+2. Review: Click "Files Changed." Did Student B use .split(";")?.
+3. Merge: Accept the code.
+4. Local Sync: Run git pull origin main.
+
+
+<!-- end_slide -->
+
+
+# Beyond the Basics: What's Next?
+* **`git config`**: Personalize your Git (Themes, Aliases, Default Editor).
+* **Git Aliases**: Turn `git commit -m` into just `git cm`.
+* **`git worktree`**: Work on two different branches at the exact same time in two different folders. No stashing required!
+* **`git rebase`**: "Clean up" your history by moving your commits to the tip of a new branch.
+* **`git bisect`**: Use binary search to find exactly which commit introduced a bug.
+
+# Resources
+
+<!-- column_layout: [1, 1] -->
+<!-- column: 0 -->
+![building-git](./building-git.jpg)
+<!-- column: 1 -->
+![progit2](./progit2.png)
+
+<!-- end_slide -->
+
+
+# 🙏 Thank You!
+
+### **Questions?**
+### [0xhoussam]
